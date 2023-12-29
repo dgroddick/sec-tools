@@ -37,7 +37,7 @@ redexclaim='\e[1;31m[!!]\e[0m'
 redstar='\e[1;31m[**]\e[0m'
 
 # Repo packages
-REPO_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "nmap" "netcat" "nikto" "john" "tcpdump" "git" 
+REPO_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "nmap" "netcat" "nikto" "john" "ffuf" "tcpdump" "git" 
             "ruby-devel" "binutils" "kernel-devel" "kernel-headers"  "glibc-headers" "glibc-devel" "dkms")
 #REPO_GROUPS=("Development Tools" "Debugging Tools" "RPM Development Tools" "Virtualization")
 REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Development Tools" "Virtualization")

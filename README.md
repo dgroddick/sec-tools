@@ -39,6 +39,7 @@ Installs the following tools, which are the common tools that I use.
 - HTTPScreenshot
 - WPScan
 - SQLMap
+- Ffuf
 - WFuzz
 - Seclists
 - Nessus
