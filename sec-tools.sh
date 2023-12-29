@@ -177,6 +177,11 @@ install_go() {
         #fi
         sudo dnf install -y golang
     fi
+
+    # if [ -z $( grep -Fxq 'export PATH=$HOME/go/bin' $HOME/.bashrc) ]; then
+    #     echo "export PATH=$PATH:$HOME/go/bin" >> $HOME/.bashrc
+    #     source $HOME/.bashrc
+    # fi
 }
 
 install_rust() {
@@ -388,7 +393,7 @@ full_install() {
     install_seclists
     install_sqlmap
     install_wfuzz
-    # #install_nessus
+    #install_nessus
     install_hydra
     install_vscode
 
