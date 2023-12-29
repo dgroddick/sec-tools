@@ -208,6 +208,15 @@ install_dotnet() {
     fi
 }
 
+install_nodejs() {
+    echo -e "$greenplus Installing NodeJS"
+    if [ $(which node) ]; then
+        echo -e "\nNodeJS is already installed\n"
+    else
+        sudo dnf install -y nodejs
+    fi
+}
+
 install_ansible() {
     echo -e "$greenplus Installing Ansible"
     if [ $(which ansible) ]; then
@@ -382,6 +391,7 @@ full_install() {
     install_go
     install_rust
     install_dotnet
+    install_nodejs
     install_ansible
     install_terraform
     install_gobuster

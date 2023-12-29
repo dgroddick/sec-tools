@@ -27,6 +27,7 @@ Installs the following tools, which are the common tools that I use.
 - Go
 - Rust
 - Dotnet
+- NodeJS
 - Nmap
 - Nikto
 - Netcat
