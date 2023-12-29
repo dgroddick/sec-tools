@@ -37,9 +37,8 @@ redexclaim='\e[1;31m[!!]\e[0m'
 redstar='\e[1;31m[**]\e[0m'
 
 # Repo packages
-REPO_TOOLS=("python3-pip" "nmap" "netcat" "git" "dnf-plugins-core" "python3-devel"
-            "ruby-devel" "tcpdump" "binutils" "kernel-devel" "kernel-headers" "libgomp"  
-            "make" "patch" "gcc" "glibc-headers" "glibc-devel" "dkms")
+REPO_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "nmap" "netcat" "nikto" "john" "tcpdump" "git" 
+            "ruby-devel" "binutils" "kernel-devel" "kernel-headers"  "glibc-headers" "glibc-devel" "dkms")
 #REPO_GROUPS=("Development Tools" "Debugging Tools" "RPM Development Tools" "Virtualization")
 REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Development Tools" "Virtualization")
 #VIRT_TOOLS=("qemu-kvm" "libvirt" "virt-install" "virt-viewer" "virt-manager")
@@ -137,8 +136,8 @@ install_virtualbox() {
     if [ $(which virtualbox ) ]; then
         echo -e "\nVirtualBox is already installed\n"
     else
-        sudo dnf config-manager --add-repo=https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo
-        sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
+        sudo dnf config-manager --add-repo=https://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+        sudo rpm --import https://www.virtualbox.org/download/oracle_vbox_2016.asc
         sudo dnf install VirtualBox-7.0 -y
         sudo usermod -aG vboxusers $USER
         sudo newgrp vboxusers
@@ -167,29 +166,41 @@ install_brave() {
 
 install_go() {
     echo -e "$greenplus Installing Go"
-    #if [ ! -d /usr/local/go ]; then
-    #    wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz -O /tmp/go$GO_VERSION.linux-amd64.tar.gz
-    #    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go$GO_VERSION.linux-amd64.tar.gz
-    #else
-    #    echo -e "\nGo is already installed\n"
-    #fi
-    sudo dnf install -y golang
+    if [ $(which go) ]; then
+        echo -e "\nGo is already installed\n"
+    else
+        #if [ ! -d /usr/local/go ]; then
+        #    wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz -O /tmp/go$GO_VERSION.linux-amd64.tar.gz
+        #    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go$GO_VERSION.linux-amd64.tar.gz
+        #else
+        #    echo -e "\nGo is already installed\n"
+        #fi
+        sudo dnf install -y golang
+    fi
 }
 
 install_rust() {
     echo -e "$greenplus Installing Rust"
-    #if [ -f $HOME/.cargo/bin/rustup ]; then
-    #    echo -e "\nrustc is already installed\n"
-    #else
-    #    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    #    source "$HOME/.cargo/env"
-    #fi
-    sudo dnf install -y rust cargo
+    if [ $(which rustc) ]; then
+        echo -e "\nRust is already installed\n"
+    else
+        #if [ -f $HOME/.cargo/bin/rustup ]; then
+        #    echo -e "\nrustc is already installed\n"
+        #else
+        #    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        #    source "$HOME/.cargo/env"
+        #fi
+        sudo dnf install -y rust cargo
+    fi
 }
 
 install_dotnet() {
     echo -e "$greenplus Installing Dotnet"
-    dnf install -y dotnet-sdk-8.0
+    if [ $(which dotnet) ]; then
+        echo -e "\nDotnet is already installed\n"
+    else
+        sudo dnf install -y dotnet-sdk-8.0
+    fi
 }
 
 install_ansible() {
@@ -198,6 +209,16 @@ install_ansible() {
         echo -e "\nAnsible is already installed\n"
     else
         python3 -m pip install ansible --user
+    fi
+}
+
+install_terraform() {
+    echo -e "$greenplus Installing Terraform"
+    if [ $(which terraform) ]; then
+        echo -e "\nTerraform is already installed\n"
+    else
+        sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        sudo dnf -y install terraform
     fi
 }
 
@@ -211,19 +232,29 @@ install_podman() {
 }
 
 install_hydra() {
-    HYDRA_PATH=/usr/local/bin/hydra
-
     echo -e "$greenplus Installing Hydra"
-    #if [ ! -d /opt/sec-tools ]; then
-    #    sudo mkdir -pv /opt/sec-tools
-    #fi;
 
-    if [ -f $HYDRA_PATH ]; then
-        echo -e "\nHydra is already installed\n"
+    if [ $(which hydra) ]; then
+            echo -e "\nHydra is already installed\n"
     else
-        cd $HOME/src && sudo git clone $HYDRA
-        cd $HOME/src/thc-hydra && ./configure && make && sudo make install
-    fi
+        distro=$(detect_os)
+        if [ $distro == 'fedora' ];then 
+            sudo dnf install -y hydra
+        else 
+            HYDRA_PATH=/usr/local/bin/hydra
+
+            # install dependencies
+            sudo dnf install -y openssl-devel pcre-devel ncpfs-devel postgresql-devel libssh-devel subversion-devel libncurses-devel
+
+            if [ ! -d $HOME/src ]; then
+                mkdir -pv $HOME/src
+            fi;
+            
+            cd $HOME/src && git clone $HYDRA
+            cd $HOME/src/thc-hydra && ./configure && make && sudo make install
+        fi
+
+    fi  
 }
 
 install_gobuster() {
@@ -329,19 +360,25 @@ install_vscode() {
 
 full_install() {
     #check_for_root
+    distro=$(detect_os)
+    if [ $distro != 'fedora' ];then 
+        echo -e "$redminus Looks like you're not running Fedora Linux. Please use a supported distribution."
+        exit
+    fi
     echo -e "$greenplus Setting things up..."
 
     update_system
     base_packages
     #setup_virtualization
-    #install_virtualbox
+    install_virtualbox
     install_wireshark
     install_brave
-    #install_podman
+    install_podman
     install_go
     install_rust
-    #install_dotnet
+    install_dotnet
     install_ansible
+    install_terraform
     install_gobuster
     install_gowitness
     install_amass
@@ -351,7 +388,7 @@ full_install() {
     install_seclists
     install_sqlmap
     install_wfuzz
-    #install_nessus
+    # #install_nessus
     install_hydra
     install_vscode
 
@@ -384,6 +421,9 @@ fi
 #
 
 # Figure out which OS we're running
-#detect_os
+# distro=$(detect_os)
+# if [ $distro == 'fedora' ];then 
+#     echo -e "$greenplus YAAAAY Fedora"
+# fi
 #configure_dnf_repos
 
