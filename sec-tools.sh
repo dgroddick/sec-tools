@@ -47,6 +47,8 @@ REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Develo
 HTTPSCREENSHOT=https://github.com/breenmachine/httpscreenshot
 MASSCAN=https://github.com/robertdavidgraham/masscan
 AMASS=github.com/owasp-amass/amass/v4/...@master
+SUBFINDER=github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+ASSETFINDER=github.com/tomnomnom/assetfinder
 HTTPROBE=github.com/tomnomnom/httprobe@latest 
 HYDRA=https://github.com/vanhauser-thc/thc-hydra.git
 GOBUSTER=github.com/OJ/gobuster/v3@latest
@@ -289,6 +291,26 @@ install_gowitness() {
     fi
 }
 
+install_subfinder() {
+    echo -e "$greenplus Installing subfinder"
+    if [ $(which subfinder) ]; then
+        echo -e "\nsubfinder is already installed\n"
+    else
+        #go install $SUBFINDER
+        sudo dnf install -y subfinder
+    fi
+}
+
+install_assetfinder() {
+    echo -e "$greenplus Installing assetfinder"
+    if [ $(which assetfinder) ]; then
+        echo -e "\nassetfinder is already installed\n"
+    else
+        #go install $ASSETFINDER
+        sudo dnf install -y assetfinder
+    fi
+}
+
 install_amass() {
     echo -e "$greenplus Installing Amass"
     if [ -f $HOME/go/bin/amass ]; then
@@ -397,6 +419,8 @@ full_install() {
     install_gobuster
     install_gowitness
     install_amass
+    install_subfinder
+    install_assetfinder
     install_httprobe
     install_waybackurls
     install_wpscan

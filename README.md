@@ -36,6 +36,8 @@ Installs the following tools, which are the common tools that I use.
 - Gobuster
 - Gowitness
 - Amass
+- Subfinder
+- Assetfinder
 - HTTProbe
 - HTTPScreenshot
 - WPScan
