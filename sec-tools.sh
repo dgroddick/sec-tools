@@ -14,7 +14,6 @@
 set -e
 
 ARCH=$(uname -m)
-
 VERSION='0.1'
 
 # terminal colours
@@ -60,6 +59,9 @@ GOWITNESS=github.com/sensepost/gowitness@latest
 WAYBACKURLS=github.com/tomnomnom/waybackurls@latest
 SECLISTS=https://github.com/danielmiessler/SecLists.git
 
+# Logged in user
+USER=$(logname)
+
 show_usage() {
     echo -e 'Configures a Linux system for Ethical Hacking.\n'
     echo -e 'Usage: sec-tools.sh [OPTION]...\n'
@@ -70,8 +72,8 @@ show_usage() {
 
 check_for_root() {
     if [ "$EUID" -ne 0 ]; then 
-        echo -e "\n\n$redminus Script must be run with sudo ./sec-tools.sh or as root\n"
-        exit
+        echo -e "\n\n$redminus Script must be run with sudo ./sec-tools.sh or as root\n$reset"
+        exit(1)
     fi
 }
 
@@ -88,7 +90,7 @@ detect_os() {
         os_version="$(. /etc/os-release && echo "$VERSION_ID")"
         echo $os_id
     else
-        echo -e "\n$redminus It is unlikely that you are running a supported Operating System.\n"
+        echo -e "\n$redminus It is unlikely that you are running a supported Operating System.\n$reset"
     fi
     # case "$os_id" in
     
@@ -109,7 +111,7 @@ detect_os() {
 configure_dnf_repos() {
     os_release=$( detect_os )
     echo $os_release
-    echo -e "$greenplus Setting up RPMFusion"
+    echo -e "$greenplus Setting up RPMFusion $reset"
     sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }
 
@@ -119,26 +121,26 @@ update_system() {
 }
 
 base_packages() {
-    echo -e "$greenplus Installing required base packages"
+    echo -e "$greenplus Installing required base packages $reset"
     for pkg in "${REPO_TOOLS[@]}"; do
         sudo dnf install -y "${pkg}"
     done
 
-    echo -e "$greenplus Installing development groups"
+    echo -e "$greenplus Installing development groups $reset"
     for pkg in "${REPO_GROUPS[@]}"; do
         sudo dnf group install -y "${pkg}"
     done
 }
 
 setup_virtualization() {
-    echo -e "$greenplus Installing packages for virtualization"
+    echo -e "$greenplus Installing packages for virtualization $reset"
     for pkg in "${VIRT_TOOLS[@]}"; do
         dnf install -y "${pkg}"
     done 
 }
 
 install_virtualbox() {
-    echo -e "$greenplus Installing VirtualBox"
+    echo -e "$greenplus Installing VirtualBox $reset"
     if [ $(which virtualbox ) ]; then
         echo -e "\nVirtualBox is already installed\n"
     else
@@ -151,7 +153,7 @@ install_virtualbox() {
 }
 
 install_wireshark() {
-    echo -e "$greenplus Installing Wireshark"
+    echo -e "$greenplus Installing Wireshark $reset"
     if [ $(which wireshark) ]; then
         echo -e "\nWireshark is already installed\n"
     else
@@ -160,7 +162,7 @@ install_wireshark() {
 }
 
 install_brave() {
-    echo -e "$greenplus Installing Brave Browser"
+    echo -e "$greenplus Installing Brave Browser $reset"
     if [ $(which brave-browser) ]; then
         echo -e "\nBrave Browser is already installed\n"
     else
@@ -171,7 +173,7 @@ install_brave() {
 }
 
 install_go() {
-    echo -e "$greenplus Installing Go"
+    echo -e "$greenplus Installing Go $reset"
     if [ $(which go) ]; then
         echo -e "\nGo is already installed\n"
     else
@@ -191,7 +193,7 @@ install_go() {
 }
 
 install_rust() {
-    echo -e "$greenplus Installing Rust"
+    echo -e "$greenplus Installing Rust $reset"
     if [ $(which rustc) ]; then
         echo -e "\nRust is already installed\n"
     else
@@ -206,7 +208,7 @@ install_rust() {
 }
 
 install_dotnet() {
-    echo -e "$greenplus Installing Dotnet"
+    echo -e "$greenplus Installing Dotnet $reset"
     if [ $(which dotnet) ]; then
         echo -e "\nDotnet is already installed\n"
     else
@@ -215,7 +217,7 @@ install_dotnet() {
 }
 
 install_nodejs() {
-    echo -e "$greenplus Installing NodeJS"
+    echo -e "$greenplus Installing NodeJS $reset"
     if [ $(which node) ]; then
         echo -e "\nNodeJS is already installed\n"
     else
@@ -224,7 +226,7 @@ install_nodejs() {
 }
 
 install_ansible() {
-    echo -e "$greenplus Installing Ansible"
+    echo -e "$greenplus Installing Ansible $reset"
     if [ $(which ansible) ]; then
         echo -e "\nAnsible is already installed\n"
     else
@@ -233,7 +235,7 @@ install_ansible() {
 }
 
 install_terraform() {
-    echo -e "$greenplus Installing Terraform"
+    echo -e "$greenplus Installing Terraform $reset"
     if [ $(which terraform) ]; then
         echo -e "\nTerraform is already installed\n"
     else
@@ -243,7 +245,7 @@ install_terraform() {
 }
 
 install_podman() {
-    echo -e "$greenplus Installing Podman"
+    echo -e "$greenplus Installing Podman $reset"
     if [ $(which podman) ]; then
 	    echo -e "\nPodman is already installed\n"
     else
@@ -252,7 +254,7 @@ install_podman() {
 }
 
 install_hydra() {
-    echo -e "$greenplus Installing Hydra"
+    echo -e "$greenplus Installing Hydra $reset"
 
     if [ $(which hydra) ]; then
             echo -e "\nHydra is already installed\n"
@@ -261,7 +263,7 @@ install_hydra() {
         if [ $distro == 'fedora' ];then 
             sudo dnf install -y hydra
         else 
-            HYDRA_PATH=/usr/local/bin/hydra
+            #HYDRA_PATH=/usr/local/bin/hydra
 
             # install dependencies
             sudo dnf install -y openssl-devel pcre-devel ncpfs-devel postgresql-devel libssh-devel subversion-devel libncurses-devel
@@ -278,8 +280,8 @@ install_hydra() {
 }
 
 install_gobuster() {
-    echo -e "$greenplus Installing Gobuster"
-    if [ -f $HOME/go/bin/gobuster ]; then
+    echo -e "$greenplus Installing Gobuster $reset"
+    if [ $(which gobuster) ]; then
         echo -e "\nGobuster is already installed\n"
     else
         go install $GOBUSTER
@@ -287,8 +289,8 @@ install_gobuster() {
 }
 
 install_gowitness() {
-    echo -e "$greenplus Installing Gowitness"
-    if [ -f $HOME/go/bin/gowitness ]; then
+    echo -e "$greenplus Installing Gowitness $reset"
+    if [ $(which gowitness) ]; then
         echo -e "\ngowitness is already installed\n"
     else
         go install $GOWITNESS
@@ -296,7 +298,7 @@ install_gowitness() {
 }
 
 install_subfinder() {
-    echo -e "$greenplus Installing subfinder"
+    echo -e "$greenplus Installing subfinder $reset"
     if [ $(which subfinder) ]; then
         echo -e "\nsubfinder is already installed\n"
     else
@@ -306,7 +308,7 @@ install_subfinder() {
 }
 
 install_assetfinder() {
-    echo -e "$greenplus Installing assetfinder"
+    echo -e "$greenplus Installing assetfinder $reset"
     if [ $(which assetfinder) ]; then
         echo -e "\nassetfinder is already installed\n"
     else
@@ -316,8 +318,8 @@ install_assetfinder() {
 }
 
 install_amass() {
-    echo -e "$greenplus Installing Amass"
-    if [ -f $HOME/go/bin/amass ]; then
+    echo -e "$greenplus Installing Amass $reset"
+    if [ $(which amass) ]; then
         echo -e "\nAmass is already installed\n"
     else
         go install -v $AMASS
@@ -325,8 +327,8 @@ install_amass() {
 }
 
 install_httprobe() {
-    echo -e "$greenplus Installing HTTProbe"
-    if [ -f $HOME/go/bin/httprobe ]; then
+    echo -e "$greenplus Installing HTTProbe $reset"
+    if [ $(which httprobe) ]; then
         echo -e "\nHttprobe is already installed\n"
     else
         go install $HTTPROBE
@@ -334,8 +336,8 @@ install_httprobe() {
 }
 
 install_waybackurls() {
-    echo -e "$greenplus Installing WaybackURLS"
-    if [ -f $HOME/go/bin/waybackurls ]; then
+    echo -e "$greenplus Installing Waybackurls $reset"
+    if [ $(which waybackurls) ]; then
         echo -e "\nWaybackurls is already installed\n"
     else
         go install $WAYBACKURLS
@@ -344,7 +346,7 @@ install_waybackurls() {
 
 
 install_wpscan() {
-    echo -e "$greenplus Installing WPScan"
+    echo -e "$greenplus Installing WPScan $reset"
     if [ $(which ruby) ]; then
         if [ $(which wpscan) ]; then
             echo -e "\nWPScan is already installed\n"
@@ -355,7 +357,7 @@ install_wpscan() {
 }
 
 install_seclists() {
-    echo -e "$greenplus Installing Seclists"
+    echo -e "$greenplus Installing Seclists $reset"
     if [ -d /opt/SecLists/ ]; then
         echo -e "\nSeclists already installed\n"
     else
@@ -364,7 +366,7 @@ install_seclists() {
 }
 
 install_sqlmap() {
-    echo -e "$greenplus Installing SQLMap"
+    echo -e "$greenplus Installing SQLMap $reset"
     if [ $(which sqlmap) ]; then
         echo -e "\nSQLMap already installed\n"
     else
@@ -373,7 +375,7 @@ install_sqlmap() {
 }
 
 install_wfuzz() {
-    echo -e "$greenplus Installing Wfuzz"
+    echo -e "$greenplus Installing Wfuzz $reset"
     if [ $(which wfuzz) ]; then
         echo -e "\nWfuzz already installed\n"
     else
@@ -387,7 +389,7 @@ install_nessus() {
 }
 
 install_vscode() {
-    echo -e "$greenplus Installing VSCode"
+    echo -e "$greenplus Installing VSCode $reset"
     if [ $(which code) ]; then
         echo -e "\nVSCode already installed\n"
     else
@@ -403,16 +405,13 @@ full_install() {
     distro=$(detect_os)
     if [ $distro != 'fedora' ];then 
         echo -e "$redminus Looks like you're not running Fedora Linux. Please use a supported distribution."
-        exit
+        exit(1)
     fi
-    echo -e "$greenplus Setting things up..."
+    echo -e "$greenplus Setting things up... $reset"
 
     configure_dnf_repos
-    update_system
-    
+    update_system    
     base_packages
-
-    #setup_virtualization
     install_virtualbox
     install_wireshark
     install_brave
@@ -434,11 +433,10 @@ full_install() {
     install_seclists
     install_sqlmap
     install_wfuzz
-    #install_nessus
     install_hydra
     install_vscode
 
-    echo -e "$greenplus All done! Happy Hacking!!"
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
@@ -463,13 +461,4 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     done
 fi
 
-# Start of main script
-#
-
-# Figure out which OS we're running
-# distro=$(detect_os)
-# if [ $distro == 'fedora' ];then 
-#     echo -e "$greenplus YAAAAY Fedora"
-# fi
-#configure_dnf_repos
 
