@@ -73,7 +73,7 @@ show_usage() {
 check_for_root() {
     if [ "$EUID" -ne 0 ]; then 
         echo -e "\n\n$redminus Script must be run with sudo ./sec-tools.sh or as root\n$reset"
-        exit(1)
+        exit 1
     fi
 }
 
@@ -88,7 +88,7 @@ detect_os() {
         os_name=$(grep '^NAME' /etc/os-release | awk -F= '{ print $2 }')
         os_id="$(. /etc/os-release && echo "$ID")"
         os_version="$(. /etc/os-release && echo "$VERSION_ID")"
-        echo $os_id
+        #echo $os_id
     else
         echo -e "\n$redminus It is unlikely that you are running a supported Operating System.\n$reset"
     fi
@@ -405,7 +405,7 @@ full_install() {
     distro=$(detect_os)
     if [ $distro != 'fedora' ];then 
         echo -e "$redminus Looks like you're not running Fedora Linux. Please use a supported distribution."
-        exit(1)
+        exit 1
     fi
     echo -e "$greenplus Setting things up... $reset"
 
