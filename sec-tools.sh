@@ -43,6 +43,10 @@ REPO_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "nmap" "netcat" "ni
 REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Development Tools" "Virtualization")
 #VIRT_TOOLS=("qemu-kvm" "libvirt" "virt-install" "virt-viewer" "virt-manager")
 
+# RPMFusion
+RPMFUSION="https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+RPMFUSION_NONFREE="https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+
 # External Tools
 HTTPSCREENSHOT=https://github.com/breenmachine/httpscreenshot
 MASSCAN=https://github.com/robertdavidgraham/masscan
@@ -77,7 +81,7 @@ setup_log_files() {
     BASH_XTRACEFD=5
 }
 
-detect_os () {
+detect_os() {
     if [ -f /etc/os-release ]; then
         os_name=$(grep '^NAME' /etc/os-release | awk -F= '{ print $2 }')
         os_id="$(. /etc/os-release && echo "$ID")"
@@ -103,10 +107,10 @@ detect_os () {
 }
 
 configure_dnf_repos() {
-    echo -e "$greenplus Detecting OS Version"
     os_release=$( detect_os )
-
     echo $os_release
+    echo -e "$greenplus Setting up RPMFusion"
+    sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }
 
 update_system() {
@@ -403,8 +407,11 @@ full_install() {
     fi
     echo -e "$greenplus Setting things up..."
 
+    configure_dnf_repos
     update_system
+    
     base_packages
+
     #setup_virtualization
     install_virtualbox
     install_wireshark
