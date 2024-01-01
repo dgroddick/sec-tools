@@ -249,12 +249,20 @@ install_terraform() {
     fi
 }
 
-install_podman() {
+install_container_tools() {
     echo -e "$greenplus Installing Podman $reset"
     if [ $(which podman) ]; then
 	    echo -e "\nPodman is already installed\n"
     else
 	    sudo dnf install -y podman podman-compose
+    fi
+
+    echo -e "$greenplus Installing Docker $reset"
+    if [ $(which docker) ]; then
+        echo -e "\nDocker is already installed\n"
+    else
+        sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+        sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     fi
 }
 
@@ -414,7 +422,7 @@ full_install() {
     configure_dnf_repos
     update_system    
     base_packages
-    install_podman
+    install_container_tools
     install_go
     install_rust
     install_dotnet
