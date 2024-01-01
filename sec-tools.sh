@@ -3,7 +3,7 @@
 # sec-tools.sh
 # Author: David Roddick
 # git clone https://github.com/dgroddick/sec-tools
-# Usage: sudo ./sec-tools.sh [option] 
+# Usage: ./sec-tools.sh [option] 
 #
 # Installs and configures security assessment tools for Linux.
 # These are just common tools that I use regularly and is not meant to replace a complete Linux distribution 
@@ -88,9 +88,14 @@ detect_os() {
         os_name=$(grep '^NAME' /etc/os-release | awk -F= '{ print $2 }')
         os_id="$(. /etc/os-release && echo "$ID")"
         os_version="$(. /etc/os-release && echo "$VERSION_ID")"
-        #echo $os_id
+
+        if [ "$os_id" != "fedora" ];then 
+            echo -e "$redminus Looks like you're not running Fedora Linux. Please use a supported distribution."
+            exit 1
+        fi
     else
         echo -e "\n$redminus It is unlikely that you are running a supported Operating System.\n$reset"
+        exit 1
     fi
     # case "$os_id" in
     
@@ -402,19 +407,13 @@ install_vscode() {
 
 full_install() {
     #check_for_root
-    distro=$(detect_os)
-    if [ $distro != 'fedora' ];then 
-        echo -e "$redminus Looks like you're not running Fedora Linux. Please use a supported distribution."
-        exit 1
-    fi
+    detect_os
+    
     echo -e "$greenplus Setting things up... $reset"
 
     configure_dnf_repos
     update_system    
     base_packages
-    install_virtualbox
-    install_wireshark
-    install_brave
     install_podman
     install_go
     install_rust
@@ -434,9 +433,15 @@ full_install() {
     install_sqlmap
     install_wfuzz
     install_hydra
-    install_vscode
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+addition_tools() {
+    install_virtualbox
+    install_wireshark
+    install_brave
+    install_vscode
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
