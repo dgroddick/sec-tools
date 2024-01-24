@@ -12,8 +12,8 @@ RPMFUSION_NONFREE="https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonf
 
 
 configure_dnf_repos() {
-    os_release=$( detect_os )
-    echo $os_release
+    #os_release=$( detect_os )
+    #echo $os_release
     echo -e "$greenplus Setting up RPMFusion $reset"
     sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }

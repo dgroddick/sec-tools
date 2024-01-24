@@ -78,22 +78,23 @@ install_hydra() {
     if [ $(which hydra) ]; then
             echo -e "\nHydra is already installed\n"
     else
-        distro=$(detect_os)
-        if [ $distro == 'fedora' ];then 
-            sudo dnf install -y hydra
-        elif [ $distro == 'rhel' ]; then 
-            #HYDRA_PATH=/usr/local/bin/hydra
+        sudo dnf install -y hydra
+        #distro=$(detect_os)
+        # if [ $distro == 'fedora' ];then 
+        #     sudo dnf install -y hydra
+        # elif [ $distro == 'rhel' ]; then 
+        #     #HYDRA_PATH=/usr/local/bin/hydra
 
-            # install dependencies
-            sudo dnf install -y openssl-devel pcre-devel ncpfs-devel postgresql-devel libssh-devel subversion-devel libncurses-devel
+        #     # install dependencies
+        #     sudo dnf install -y openssl-devel pcre-devel ncpfs-devel postgresql-devel libssh-devel subversion-devel libncurses-devel
 
-            if [ ! -d $HOME/src ]; then
-                mkdir -pv $HOME/src
-            fi;
+        #     if [ ! -d $HOME/src ]; then
+        #         mkdir -pv $HOME/src
+        #     fi;
             
-            cd $HOME/src && git clone $HYDRA
-            cd $HOME/src/thc-hydra && ./configure && make && sudo make install
-        fi
+        #     cd $HOME/src && git clone $HYDRA
+        #     cd $HOME/src/thc-hydra && ./configure && make && sudo make install
+        # fi
     fi  
 }
 

@@ -91,31 +91,33 @@ full_install() {
     #check_for_root
     #detect_os
     
-    source ./rhel.sh
+    #source ./rhel.sh
+    source ./fedora.sh
+
     echo -e "$greenplus Setting things up... $reset"
 
     configure_dnf_repos
     update_system    
     base_packages
-    # install_container_tools
+    install_container_tools
     install_go
     install_rust
     install_dotnet
     install_nodejs
     install_ansible
-    # install_terraform
-    # install_gobuster
-    # install_gowitness
-    # install_amass
-    # install_subfinder
-    # install_assetfinder
-    # install_httprobe
-    # install_waybackurls
-    # install_wpscan
-    # install_seclists
-    # install_sqlmap
-    # install_wfuzz
-    # install_hydra
+    install_terraform
+    install_gobuster
+    install_gowitness
+    install_amass
+    install_subfinder
+    install_assetfinder
+    install_httprobe
+    install_waybackurls
+    install_wpscan
+    install_seclists
+    install_sqlmap
+    install_wfuzz
+    install_hydra
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
