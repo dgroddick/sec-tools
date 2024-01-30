@@ -1,5 +1,18 @@
 #!/bin/bash
 
+GOBUSTER=github.com/OJ/gobuster/v3@latest
+GOWITNESS=github.com/sensepost/gowitness@latest
+SUBFINDER=github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+ASSETFINDER=github.com/tomnomnom/assetfinder
+AMASS=github.com/owasp-amass/amass/v4/...@master
+HTTPROBE=github.com/tomnomnom/httprobe@latest 
+WAYBACKURLS=github.com/tomnomnom/waybackurls@latest
+HTTPSCREENSHOT=https://github.com/breenmachine/httpscreenshot
+MASSCAN=https://github.com/robertdavidgraham/masscan
+SECLISTS=https://github.com/danielmiessler/SecLists.git
+HYDRA=https://github.com/vanhauser-thc/thc-hydra.git
+
+
 install_go() {
     echo -e "$greenplus Installing Go $reset"
     if [ $(which go) ]; then
@@ -69,6 +82,71 @@ install_container_tools() {
     else
         sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
         sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    fi
+}
+
+install_gobuster() {
+    echo -e "$greenplus Installing Gobuster $reset"
+    if [ $(which gobuster) ]; then
+        echo -e "\nGobuster is already installed\n"
+    else
+        go install $GOBUSTER
+    fi
+}
+
+install_gowitness() {
+    echo -e "$greenplus Installing Gowitness $reset"
+    if [ $(which gowitness) ]; then
+        echo -e "\ngowitness is already installed\n"
+    else
+        go install $GOWITNESS
+    fi
+}
+
+install_subfinder() {
+    echo -e "$greenplus Installing subfinder $reset"
+    if [ $(which subfinder) ]; then
+        echo -e "\nsubfinder is already installed\n"
+    else
+        #go install $SUBFINDER
+        sudo dnf install -y subfinder
+    fi
+}
+
+install_assetfinder() {
+    echo -e "$greenplus Installing assetfinder $reset"
+    if [ $(which assetfinder) ]; then
+        echo -e "\nassetfinder is already installed\n"
+    else
+        #go install $ASSETFINDER
+        sudo dnf install -y assetfinder
+    fi
+}
+
+install_amass() {
+    echo -e "$greenplus Installing Amass $reset"
+    if [ $(which amass) ]; then
+        echo -e "\nAmass is already installed\n"
+    else
+        go install -v $AMASS
+    fi
+}
+
+install_httprobe() {
+    echo -e "$greenplus Installing HTTProbe $reset"
+    if [ $(which httprobe) ]; then
+        echo -e "\nHttprobe is already installed\n"
+    else
+        go install $HTTPROBE
+    fi
+}
+
+install_waybackurls() {
+    echo -e "$greenplus Installing Waybackurls $reset"
+    if [ $(which waybackurls) ]; then
+        echo -e "\nWaybackurls is already installed\n"
+    else
+        go install $WAYBACKURLS
     fi
 }
 

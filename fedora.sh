@@ -19,17 +19,7 @@ configure_dnf_repos() {
 }
 
 base_packages() {
-    echo -e "$greenplus Installing required base packages $reset"
-    for pkg in "${REPO_TOOLS[@]}"; do
-        sudo dnf install -y "${pkg}"
-    done
-
-    for pkg in "${SCAN_TOOLS[@]}"; do
-        sudo dnf install -y "${pkg}"
-    done
-
-    echo -e "$greenplus Installing development groups $reset"
-    for pkg in "${REPO_GROUPS[@]}"; do
-        sudo dnf group install -y "${pkg}"
-    done
+    echo -e "$greenplus Installing required required packages $reset"
+    sudo dnf install -y "${REPO_TOOLS[@]}" "${SCAN_TOOLS[@]}"
+    sudo dnf group install -y "${REPO_GROUPS[@]}"
 }

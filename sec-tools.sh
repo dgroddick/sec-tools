@@ -19,23 +19,26 @@ VERSION='0.1'
 # Logged in user
 USER=$(logname)
 
+# terminal colours
+red=$'\e[1;31m'
+green=$'\e[1;32m'
+blue=$'\e[1;34m'
+magenta=$'\e[1;35m'
+cyan=$'\e[1;36m'
+yellow=$'\e[1;93m'
+white=$'\e[0m'
+bold=$'\e[1m'
+norm=$'\e[21m'
+reset=$'\e[0m'
 
-HTTPSCREENSHOT=https://github.com/breenmachine/httpscreenshot
-MASSCAN=https://github.com/robertdavidgraham/masscan
-AMASS=github.com/owasp-amass/amass/v4/...@master
-SUBFINDER=github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-ASSETFINDER=github.com/tomnomnom/assetfinder
-HTTPROBE=github.com/tomnomnom/httprobe@latest 
-GOBUSTER=github.com/OJ/gobuster/v3@latest
-GOWITNESS=github.com/sensepost/gowitness@latest
-WAYBACKURLS=github.com/tomnomnom/waybackurls@latest
+# status indicators
+greenplus='\e[1;33m[++]\e[0m'
+greenminus='\e[1;33m[--]\e[0m'
+redminus='\e[1;31m[--]\e[0m'
+redexclaim='\e[1;31m[!!]\e[0m'
+redstar='\e[1;31m[**]\e[0m'
 
-SECLISTS=https://github.com/danielmiessler/SecLists.git
-HYDRA=https://github.com/vanhauser-thc/thc-hydra.git
-
-source ./term-colours.sh
-source ./recon.sh
-source ./common.sh
+source ./tools.sh
 
 show_usage() {
     echo -e 'Configures a Linux system for Ethical Hacking.\n'
@@ -96,8 +99,8 @@ full_install() {
 
     echo -e "$greenplus Setting things up... $reset"
 
-    configure_dnf_repos
-    update_system    
+    #configure_dnf_repos
+    #update_system    
     base_packages
     install_container_tools
     install_go
