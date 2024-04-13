@@ -5,11 +5,11 @@
 # git clone https://github.com/dgroddick/sec-tools
 # Usage: ./sec-tools.sh [option] 
 #
-# Installs and configures security assessment tools for Linux.
+# Installs and configures security assessment tools for Fedora Linux.
 # These are just common tools that I use regularly and is not meant to replace a complete Linux distribution 
 # like Kali Linux.
 #
-# Inspired by PimpMyKali
+# Inspired by PimpMyKali but different.
 #
 set -e
 
@@ -38,12 +38,19 @@ redminus='\e[1;31m[--]\e[0m'
 redexclaim='\e[1;31m[!!]\e[0m'
 redstar='\e[1;31m[**]\e[0m'
 
-source ./tools.sh
+source ./fedora.sh
+source ./general.sh
+source ./dev-tools.sh
+source ./infra-tools.sh
+source ./recon-tools.sh
+source ./hacking-tools.sh
 
 show_usage() {
     echo -e 'Configures a Linux system for Ethical Hacking.\n'
     echo -e 'Usage: sec-tools.sh [OPTION]...\n'
     echo '  -h, --help           show this message and exit'
+    echo '  -d, --dev            install programming and development tools'
+    echo '  -i, --infra          install infrastructure tools'
     echo '  -f, --full           perform full configuration'
     echo '  -v, --version        print version information and exit'
 }
@@ -53,12 +60,6 @@ check_for_root() {
         echo -e "\n\n$redminus Script must be run with sudo ./sec-tools.sh or as root\n$reset"
         exit 1
     fi
-}
-
-setup_log_files() {
-    exec > >(tee /var/log/sec-tools.log)
-    exec 5> /var/log/sec-tools.debug.log
-    BASH_XTRACEFD=5
 }
 
 detect_os() {
@@ -79,36 +80,55 @@ detect_os() {
 
 update_system() {
     echo -e "$greenplus Updating system"
-    sudo dnf -y upgrade
+    dnf -y upgrade
 }
 
-addition_tools() {
-    install_virtualbox
-    install_wireshark
-    install_brave
-    install_vscode
-}
+#
+# Tools for programming
+#
+install_dev_tools() {
+    echo -e "$greenplus Installing Development Tools... $reset"
 
-
-full_install() {
-    #check_for_root
-    #detect_os
-    
-    #source ./rhel.sh
-    source ./fedora.sh
-
-    echo -e "$greenplus Setting things up... $reset"
-
-    #configure_dnf_repos
-    #update_system    
+    configure_dnf_repos
+    update_system    
     base_packages
-    install_container_tools
     install_go
     install_rust
     install_dotnet
     install_nodejs
+    install_vscode
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+#
+# Tools for infrastructure, like Docker and Ansible...
+#
+install_infra_tools() {
+    echo -e "$greenplus Installing Infrastructure Tools... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+
+    install_container_tools
     install_ansible
     install_terraform
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+
+#
+# Tools for recon and scanning
+#
+install_recon_tools() {
+    echo -e "$greenplus Installing recon and scanning tools... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+
+    dnf install -y "${SCAN_TOOLS[@]}"
+
     install_gobuster
     install_gowitness
     install_amass
@@ -117,10 +137,45 @@ full_install() {
     install_httprobe
     install_waybackurls
     install_wpscan
-    install_seclists
-    install_sqlmap
-    install_wfuzz
+    install_sublist3r
+    install_theharvester
+    install_sherlock
+
+    install_wireshark
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+#
+# Tools for hacking
+#
+install_hack_tools() {
+    echo -e "$greenplus Installing Hacking Tools... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+
+    base_hacking_packages
     install_hydra
+    install_wfuzz
+    install_sqlmap
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+full_install() {
+    echo -e "$greenplus Installing everything... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+    
+    install_dev_tools
+    install_infra_tools
+    install_recon_tools
+    install_hack_tools
+
+    install_wireshark
+    install_seclists
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
@@ -134,6 +189,18 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             ;;
         -f | --full)
             full_install
+            ;;
+        -d | --dev)
+            install_dev_tools
+            ;;
+        -i | --infra)
+            install_infra_tools
+            ;;
+        -r | --recon)
+            install_recon_tools
+            ;;
+        -x | --hack)
+            install_infra_tools
             ;;
         -v | --version)
             echo "${VERSION}"
