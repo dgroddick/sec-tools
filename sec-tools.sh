@@ -203,6 +203,8 @@ full_install() {
     install_infra_tools
     install_recon_tools
     install_hack_tools
+    install_web_hack_tools
+    install_rev_eng_tools
 
     install_wireshark
     install_seclists
@@ -230,7 +232,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             install_recon_tools
             ;;
         -x | --hack)
-            install_infra_tools
+            install_hack_tools
+            ;;
+        -w | --web)
+            install_web_hack_tools
+            ;;
+        -m | --mal)
+            install_rev_eng_tools
             ;;
         -v | --version)
             echo "${VERSION}"
