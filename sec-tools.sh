@@ -77,7 +77,7 @@ detect_os() {
 
 update_system() {
     echo -e "$greenplus Updating system"
-    dnf -y upgrade
+    sudo dnf -y upgrade
 }
 
 #
