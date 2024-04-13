@@ -44,6 +44,8 @@ source ./dev-tools.sh
 source ./infra-tools.sh
 source ./recon-tools.sh
 source ./hacking-tools.sh
+source ./web-tools.sh
+source ./rev-eng.sh
 
 show_usage() {
     echo -e 'Configures a Linux system for Ethical Hacking.\n'
@@ -159,6 +161,34 @@ install_hack_tools() {
     install_hydra
     install_wfuzz
     install_sqlmap
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+#
+# Tools for Web hacking
+#
+install_web_hack_tools() {
+    echo -e "$greenplus Installing Web Hacking Tools... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+
+    install_zap
+
+    echo -e "$greenplus All done! Happy Hacking!! $reset"
+}
+
+#
+# Tools for Reverse Engineering
+#
+install_rev_eng_tools() {
+    echo -e "$greenplus Installing Reverse Engineering Tools... $reset"
+    configure_dnf_repos
+    update_system    
+    base_packages
+
+    install_ghidra
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }

@@ -2,7 +2,7 @@
 # Tools from the Fedora repos
 
 # Repo packages
-CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "ruby-devel" "kernel-devel")
+CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "ruby-devel" "kernel-devel" "java-latest-openjdk-devel")
 CLEANING_TOOLS=("bleachbit" "clamav" "clamav-freshclam" "rkhunter" "chkrootkit")
 REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Development Tools")
 
