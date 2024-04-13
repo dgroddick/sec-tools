@@ -208,21 +208,21 @@ full_install() {
 }
 
 main() {
-    echo "SEC TOOLS\n"
-    echo "===========\n\n"
-    echo "A toolkit to configure a Fedora Linux Security Research System.\n"
+    echo -e "SEC TOOLS\n"
+    echo -e "===========\n\n"
+    echo -e "A toolkit to configure a Fedora Linux Security Research System.\n"
 
-    echo "\n"
-    echo "What do you want to do?\n"
-    echo "1) Install Development Tools\n"
-    echo "2) Install Infrastructure Tools\n"
-    echo "3) Install Recon and Scanning Tools\n"
-    echo "4) Install Linux Hacking Tools\n"
-    echo "5) Install Web Hacking Tools\n"
-    echo "6) Install Reverse Engineering Tools\n"
-    echo "7) Install Everything\n"
-    echo "\n"
-    echo "> "
+    echo -e "\n"
+    echo -e "What do you want to do?\n"
+    echo -e "1) Install Development Tools\n"
+    echo -e "2) Install Infrastructure Tools\n"
+    echo -e "3) Install Recon and Scanning Tools\n"
+    echo -e "4) Install Linux Hacking Tools\n"
+    echo -e "5) Install Web Hacking Tools\n"
+    echo -e "6) Install Reverse Engineering Tools\n"
+    echo -e "7) Install Everything\n"
+    echo -e "\n"
+    echo -e "> "
     
     read OPT
     case "${OPT}" in
