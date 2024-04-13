@@ -48,13 +48,8 @@ source ./web-tools.sh
 source ./rev-eng.sh
 
 show_usage() {
-    echo -e 'Configures a Linux system for Ethical Hacking.\n'
-    echo -e 'Usage: sec-tools.sh [OPTION]...\n'
-    echo '  -h, --help           show this message and exit'
-    echo '  -d, --dev            install programming and development tools'
-    echo '  -i, --infra          install infrastructure tools'
-    echo '  -f, --full           perform full configuration'
-    echo '  -v, --version        print version information and exit'
+    echo -e 'Configures a Linux system for Ethical Hacking and Cyber Security Research.\n'
+    echo -e 'Usage: sec-tools.sh\n'
 }
 
 check_for_root() {
@@ -129,7 +124,7 @@ install_recon_tools() {
     update_system    
     base_packages
 
-    dnf install -y "${SCAN_TOOLS[@]}"
+    sudo dnf install -y "${SCAN_TOOLS[@]}"
 
     install_gobuster
     install_gowitness
@@ -212,42 +207,48 @@ full_install() {
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    for opt in "$@"; do
-        case ${opt} in
-        -h | --help)
-            show_usage
-            exit 0
-            ;;
-        -f | --full)
-            full_install
-            ;;
-        -d | --dev)
+main() {
+    echo "SEC TOOLS\n"
+    echo "===========\n\n"
+    echo "A toolkit to configure a Fedora Linux Security Research System.\n"
+
+    echo "\n"
+    echo "What do you want to do?\n"
+    echo "1) Install Development Tools\n"
+    echo "2) Install Infrastructure Tools\n"
+    echo "3) Install Recon and Scanning Tools\n"
+    echo "4) Install Linux Hacking Tools\n"
+    echo "5) Install Web Hacking Tools\n"
+    echo "6) Install Reverse Engineering Tools\n"
+    echo "7) Install Everything\n"
+    echo "\n"
+    echo "> "
+    
+    read OPT
+    case "${OPT}" in
+        1)
             install_dev_tools
             ;;
-        -i | --infra)
+        2)  
             install_infra_tools
             ;;
-        -r | --recon)
+        3)
             install_recon_tools
             ;;
-        -x | --hack)
+        4)
             install_hack_tools
             ;;
-        -w | --web)
+        5)
             install_web_hack_tools
             ;;
-        -m | --mal)
+        6)
             install_rev_eng_tools
             ;;
-        -v | --version)
-            echo "${VERSION}"
-            exit 0
+        7)
+            full_install
             ;;
         *)
-            echo "Error: unknown option ${opt}" >&2
-            exit 2
-            ;;
-        esac
-    done
-fi
+            echo "Please select a number from 1-7.\n"
+    esac
+}
+main

@@ -15,6 +15,6 @@ install_ghidra() {
     else
         cd /tmp && wget $GHIDRA_RELEASE_URL
         unzip $GHIDRA_RELEASE
-        mv $GHIDRA_RELEASE /opt/ghidra
+        sudo mv $GHIDRA_RELEASE /opt/ghidra
     fi
 }

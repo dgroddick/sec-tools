@@ -43,7 +43,7 @@ install_subfinder() {
     if [ $(which subfinder) ]; then
         echo -e "\nsubfinder is already installed\n"
     else
-        dnf install -y subfinder
+        sudo dnf install -y subfinder
     fi
 }
 
@@ -52,7 +52,7 @@ install_assetfinder() {
     if [ $(which assetfinder) ]; then
         echo -e "\nassetfinder is already installed\n"
     else
-        dnf install -y assetfinder
+        sudo dnf install -y assetfinder
     fi
 }
 
@@ -99,7 +99,7 @@ install_sublist3r() {
     if [ -d /opt/Sublist3r ]; then
         echo -e "\nSublist3r already installed\n"
     else
-        cd /opt && git clone --depth 1 $SUBLIST3R
+        cd /opt && sudo git clone --depth 1 $SUBLIST3R
     fi
 }
 
@@ -108,7 +108,7 @@ install_theharvester() {
     if [ -d /opt/theHarvester ]; then
         echo -e "\ntheHarvester already installed\n"
     else
-        cd /opt && git clone --depth 1 $THEHARVESTER
+        cd /opt && sudo git clone --depth 1 $THEHARVESTER
     fi
 }
 
@@ -117,6 +117,6 @@ install_sherlock() {
     if [ -d /opt/sherlock ]; then
         echo -e "\nSherlock already installed\n"
     else
-        cd /opt && git clone --depth 1 $SHERLOCK
+        cd /opt && sudo git clone --depth 1 $SHERLOCK
     fi
 }

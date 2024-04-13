@@ -7,7 +7,7 @@ install_seclists() {
     if [ -d /opt/SecLists ]; then
         echo -e "\nSeclists already installed\n"
     else
-        cd /opt && git clone --depth 1 $SECLISTS
+        cd /opt && sudo git clone --depth 1 $SECLISTS
     fi
 }
 
@@ -16,6 +16,6 @@ install_wireshark() {
     if [ $(which wireshark) ]; then
         echo -e "\nWireshark is already installed\n"
     else
-        dnf install -y wireshark
+        sudo dnf install -y wireshark
     fi
 }

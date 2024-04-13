@@ -10,6 +10,6 @@ install_zap() {
     else
         cd /tmp && wget $ZAP_RELEASE_URL
         tar xfz $ZAP_RELEASE
-        mv $ZAP_RELEASE /opt/ZAP
+        sudo mv $ZAP_RELEASE /opt/ZAP
     fi
 }

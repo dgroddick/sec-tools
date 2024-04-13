@@ -6,7 +6,7 @@ HYDRA=https://github.com/vanhauser-thc/thc-hydra.git
 
 base_hacking_packages() {
     echo -e "$greenplus Installing required required packages $reset"
-    dnf install -y "${CORE_HACK_TOOLS[@]}"
+    sudo dnf install -y "${CORE_HACK_TOOLS[@]}"
 }
 
 install_hydra() {
@@ -15,7 +15,7 @@ install_hydra() {
     if [ $(which hydra) ]; then
         echo -e "\nHydra is already installed\n"
     else
-        dnf install -y hydra
+        sudo dnf install -y hydra
     fi  
 }
 

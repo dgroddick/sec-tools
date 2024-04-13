@@ -15,12 +15,12 @@ configure_dnf_repos() {
     #os_release=$( detect_os )
     #echo $os_release
     echo -e "$greenplus Setting up RPMFusion $reset"
-    dnf install -y $RPMFUSION $RPMFUSION_NONFREE
+    sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }
 
 base_packages() {
     echo -e "$greenplus Installing required packages $reset"
-    dnf install -y "${CORE_TOOLS[@]}"
-    dnf install -y "${CLEANING_TOOLS[@]}"
-    dnf group install -y "${REPO_GROUPS[@]}"
+    sudo dnf install -y "${CORE_TOOLS[@]}"
+    sudo dnf install -y "${CLEANING_TOOLS[@]}"
+    sudo dnf group install -y "${REPO_GROUPS[@]}"
 }
