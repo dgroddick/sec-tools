@@ -10,12 +10,3 @@ install_seclists() {
         cd /opt && sudo git clone --depth 1 $SECLISTS
     fi
 }
-
-install_wireshark() {
-    echo -e "$greenplus Installing Wireshark $reset"
-    if [ $(which wireshark) ]; then
-        echo -e "\nWireshark is already installed\n"
-    else
-        sudo dnf install -y wireshark
-    fi
-}

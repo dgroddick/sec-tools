@@ -38,14 +38,7 @@ redminus='\e[1;31m[--]\e[0m'
 redexclaim='\e[1;31m[!!]\e[0m'
 redstar='\e[1;31m[**]\e[0m'
 
-source ./fedora.sh
 source ./general.sh
-source ./dev-tools.sh
-source ./infra-tools.sh
-source ./recon-tools.sh
-source ./hacking-tools.sh
-source ./web-tools.sh
-source ./rev-eng.sh
 
 show_usage() {
     echo -e 'Configures a Linux system for Ethical Hacking and Cyber Security Research.\n'
@@ -64,11 +57,19 @@ detect_os() {
         os_name=$(grep '^NAME' /etc/os-release | awk -F= '{ print $2 }')
         os_id="$(. /etc/os-release && echo "$ID")"
         os_version="$(. /etc/os-release && echo "$VERSION_ID")"
+	echo $os_id
 
-        if [ "$os_id" != "rhel" ] || [ "$os_id" != "fedora" ];then 
-            echo -e "$redminus Looks like you're not running a supported Linux distribution. Sorry"
-            exit 1
-        fi
+	if [ "$os_id" == "centos" ];then
+	    echo "Loading CentOS tools"
+	    source ./centos.sh
+	    configure_dnf
+	    base_packages
+    	elif [ "$os_id" == "fedora" ];then
+            echo "Loading Fedora tools..."
+	    source ./fedora.sh
+	else
+            echo "You must be running RHEL... Cool!"
+	fi
     else
         echo -e "\n$redminus It is unlikely that you are running a supported Operating System.\n$reset"
         exit 1
@@ -85,16 +86,12 @@ update_system() {
 #
 install_dev_tools() {
     echo -e "$greenplus Installing Development Tools... $reset"
-
-    configure_dnf_repos
-    update_system    
-    base_packages
+    source ./dev-tools.sh
     install_go
     install_rust
     install_dotnet
     install_nodejs
     install_vscode
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -103,14 +100,10 @@ install_dev_tools() {
 #
 install_infra_tools() {
     echo -e "$greenplus Installing Infrastructure Tools... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-
+    source ./infra-tools.sh
     install_container_tools
     install_ansible
     install_terraform
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -120,12 +113,8 @@ install_infra_tools() {
 #
 install_recon_tools() {
     echo -e "$greenplus Installing recon and scanning tools... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-
+    source ./recon-tools.sh
     sudo dnf install -y "${SCAN_TOOLS[@]}"
-
     install_gobuster
     install_gowitness
     install_amass
@@ -137,9 +126,6 @@ install_recon_tools() {
     install_sublist3r
     install_theharvester
     install_sherlock
-
-    install_wireshark
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -148,15 +134,11 @@ install_recon_tools() {
 #
 install_hack_tools() {
     echo -e "$greenplus Installing Hacking Tools... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-
+    source ./hacking-tools.sh
     base_hacking_packages
     install_hydra
     install_wfuzz
     install_sqlmap
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -165,12 +147,8 @@ install_hack_tools() {
 #
 install_web_hack_tools() {
     echo -e "$greenplus Installing Web Hacking Tools... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-
+    source ./web-tools.sh
     install_zap
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -179,38 +157,29 @@ install_web_hack_tools() {
 #
 install_rev_eng_tools() {
     echo -e "$greenplus Installing Reverse Engineering Tools... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-
+    source ./rev-eng.sh
     install_ghidra
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
 full_install() {
     echo -e "$greenplus Installing everything... $reset"
-    configure_dnf_repos
-    update_system    
-    base_packages
-    
     install_dev_tools
     install_infra_tools
     install_recon_tools
     install_hack_tools
     install_web_hack_tools
     install_rev_eng_tools
-
-    install_wireshark
     install_seclists
-
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
 main() {
+    detect_os
+
     echo "SEC TOOLS"
     echo "==========="
-    echo "A toolkit to configure a Fedora Linux Security Research System."
+    echo "A toolkit to configure a Fedora/CentOS Linux Security Research System."
 
     echo "What do you want to do?"
     echo "1) Install Development Tools"
