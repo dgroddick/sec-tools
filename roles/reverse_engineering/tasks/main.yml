@@ -1,0 +1,58 @@
+- name: Set up EPEL
+  when: ansible_facts['distribution'] == "CentOS"
+  ansible.builtin.dnf:
+    name: epel-release
+    state: present
+
+- name: Install CentOS
+  when: ansible_facts['distribution'] == "CentOS"
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - '@Development Tools'
+    - '@RPM Development Tools'
+    - '@Java Development'
+    - '@Debugging Tools'
+    - '@Additional Development'
+    - '@Container Management'
+
+- name: Install Fedora
+  when: ansible_facts['distribution'] == "Fedora"
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - '@Development Tools'
+    - '@C Development Tools and Libraries'
+    - '@RPM Development Tools'
+    - '@Java Development'
+    - '@Container Management'
+    - '@Security Lab'
+
+- name: Install extra packages
+  tags: extra
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - dnf-plugins-core
+    - python3-pip
+    - tcpdump
+    - rkhunter
+    - nmap
+    - netcat
+
+- name: Install extra programming languages and SDKs
+  tags: prog
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - golang
+    - delve
+    - rust
+    - cargo
+    - python3-devel
+    - ruby-devel
+    - yasm

@@ -1,0 +1,6 @@
+---
+- name: Setup CentOS
+  hosts: all
+  become: true
+  roles:
+    - { role: reverse_engineering, tags: ['reverse'] }
