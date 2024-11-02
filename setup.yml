@@ -1,5 +1,5 @@
 ---
-- name: Setup CentOS
+- name: Setup Security Tools
   hosts: all
   become: true
   roles:

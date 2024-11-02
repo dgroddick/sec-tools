@@ -56,3 +56,13 @@
     - python3-devel
     - ruby-devel
     - yasm
+
+# flatpak install flathub org.ghidra_sre.Ghidra
+# flatpak install flathub re.rizin.cutter
+- name: Install flatpak tools
+  when: ansible_facts['distribution'] == "Fedora"
+  community.general.flatpak:
+    name:
+      - org.ghidra_sre.Ghidra
+      - re.rizin.cutter
+      - org.zaproxy.ZAP

@@ -14,17 +14,25 @@ Should be run as a regular user with sudo privileges. Ideally you should have NO
 Moving scripts to ansible. You'll need to have ansible installed.
 
 ```
-$ python3 -m pip install ansible ansible-navigator
+$ python3 -m pip install ansible
 ```
 
-Edit the hosts file, whether you're running against your localhost or a VM. Then run setup.yml.
+Edit the inventory file if you're running against remote virtual machines.
+You'll also need to install the additional ansible collections.
 
 ```
-$ ansible-navigator run setup.yml -m stdout
+$ ansible-galaxy collection install -r requirements.yml
+```
+
+Now you can run the setup.
+
+
+```
+$ ansible-playbook setup.yml
 ```
 
 You can also tag specific roles depending on your purpose. Eg. To install the reverse engineering role.
 
 ```
-$ ansible-navigator run setup.yml -m stdout -treverse
+$ ansible-playbook setup.yml -treverse
 ```
