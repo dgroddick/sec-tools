@@ -25,7 +25,7 @@ install_gobuster() {
     if [ $(which gobuster) ]; then
         echo -e "\nGobuster is already installed\n"
     else
-        go install $GOBUSTER
+        sudo dnf install -y gobuster
     fi
 }
 
@@ -70,7 +70,7 @@ install_httprobe() {
     if [ $(which httprobe) ]; then
         echo -e "\nHttprobe is already installed\n"
     else
-        go install $HTTPROBE
+        sudo dnf install -y httprobe
     fi
 }
 
