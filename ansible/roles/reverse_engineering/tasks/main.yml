@@ -1,22 +1,4 @@
-- name: Set up EPEL
-  when: ansible_facts['distribution'] == "CentOS"
-  ansible.builtin.dnf:
-    name: epel-release
-    state: present
-
-- name: Install CentOS
-  when: ansible_facts['distribution'] == "CentOS"
-  ansible.builtin.dnf:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - '@Development Tools'
-    - '@RPM Development Tools'
-    - '@Java Development'
-    - '@Debugging Tools'
-    - '@Additional Development'
-    - '@Container Management'
-
+---
 - name: Install Fedora
   when: ansible_facts['distribution'] == "Fedora"
   ansible.builtin.dnf:

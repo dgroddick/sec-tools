@@ -1,0 +1,22 @@
+Dependencies
+------------
+https://rvm.io/rvm/install
+\curl -sSL https://get.rvm.io | bash -s stable —ruby
+source ~/.rvm/scripts/rvm
+
+
+
+Tools
+------
+https://github.com/nmap/nmap
+https://github.com/rapid7/metasploit-framework
+https://github.com/vanhauser-thc/thc-hydra.git
+https://github.com/OJ/gobuster/v3@latest
+
+
+https://github.com/sensepost/gowitness@latest
+https://github.com/tomnomnom/assetfinder
+https://github.com/tomnomnom/httprobe@latest
+https://github.com/tomnomnom/waybackurls@latest
+https://github.com/aboul3la/Sublist3r
+

@@ -57,14 +57,14 @@
         path: src
         state: directory
         mode: '0755'
-        owner: madhat
-        group: madhat
+        owner: dave
+        group: dave
 
     - name: Install Git packages
       tags: git
       ansible.builtin.git:
         repo: "{{ item.repo }}"
-        dest: "/home/madhat/src/{{ item.name }}"
+        dest: "/home/dave/src/{{ item.name }}"
       become: false
       with_items:
         - { name: sublist3r, repo: https://github.com/aboul3la/Sublist3r }
