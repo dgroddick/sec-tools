@@ -113,6 +113,7 @@ install_seclists() {
 full_install() {
     echo -e "$greenplus Installing everything... $reset"
 
+    mkdir $HOME/tools/
     configure_dnf_repos
     base_packages
     install_recon_tools
