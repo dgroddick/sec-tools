@@ -1,6 +1,0 @@
----
-- name: Setup Security Tools
-  hosts: all
-  become: true
-  roles:
-    - { role: reverse_engineering, tags: ['reverse'] }
