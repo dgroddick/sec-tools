@@ -68,7 +68,7 @@ SUBLIST3R=https://github.com/aboul3la/Sublist3r
 
 base_install() {
     update_system
-    
+
     echo -e "$greenplus Installing required packages $reset"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
     sudo dnf install -y "${CORE_TOOLS[@]}" "${CLEANING_TOOLS[@]}" "${RECON_TOOLS[@]}"
