@@ -41,7 +41,7 @@ install_wpscan() {
         if [ $(which wpscan) ]; then
             echo -e "\nWPScan is already installed\n"
         else
-            gem update && gem install wpscan --no-document
+            gem update && gem install wpscan
         fi
     fi
 }
