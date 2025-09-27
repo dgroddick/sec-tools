@@ -56,7 +56,6 @@ RECON_TOOLS=("netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
 
 ## Flatpak tools
 ZAP="org.zaproxy.ZAP"
-BURP="net.portswigger.BurpSuite-Community"
 
 ## SecLists
 SECLISTS=https://github.com/danielmiessler/SecLists.git
@@ -80,7 +79,6 @@ webproxy_install() {
     sudo dnf install -y flatpak
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     flatpak install flathub $ZAP
-    flatpak install flathub $BURP
 }
 
 recon_tools_install() {
