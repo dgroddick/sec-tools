@@ -49,11 +49,10 @@ update_system() {
 }
 
 ## Repo packages
-CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "kernel-devel" "golang" "rust" "cargo" "ruby-devel")
+CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "kernel-devel" "golang" "rust" "cargo" "ruby-devel" "php-devel")
 CLEANING_TOOLS=("bleachbit" "clamav" "clamav-freshclam" "rkhunter" "chkrootkit")
-REPO_GROUPS=("Development Tools" "C Development Tools and Libraries" "RPM Development Tools")
+REPO_GROUPS=("security-lab" "development-libs" "c-development" "rpm-development-tools" "container-management" "php")
 HACK_TOOLS=("hydra" "john")
-CONTAINER=("podman" "podman-compose" "podman-docker" "skopeo" "buildah")
 RECON_TOOLS=("nmap" "netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
 
 # SecLists
@@ -65,20 +64,15 @@ RPMFUSION_NONFREE="https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonf
 
 
 configure_dnf_repos() {
-    #os_release=$( detect_os )
-    #echo $os_release
     echo -e "$greenplus Setting up RPMFusion $reset"
     sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }
 
 base_packages() {
     echo -e "$greenplus Installing required packages $reset"
-    sudo dnf install -y "${CORE_TOOLS[@]}"
-    sudo dnf install -y "${CLEANING_TOOLS[@]}"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
-    sudo dnf install -y "${HACK_TOOLS[@]}"
-    sudo dnf install -y "${CONTAINER[@]}"
-    sudo dnf install -y "${SCAN_TOOLS[@]}"
+
+    sudo dnf install -y "${CORE_TOOLS[@]} ${CLEANING_TOOLS[@]} ${HACK_TOOLS[@]} ${CONTAINER[@]} ${SCAN_TOOLS[@]}"
 }
 
 #
@@ -110,14 +104,14 @@ install_seclists() {
     fi
 }
 
-full_install() {
+install() {
     echo -e "$greenplus Installing everything... $reset"
 
     mkdir $HOME/tools/
-    configure_dnf_repos
+    #configure_dnf_repos
     base_packages
-    install_recon_tools
-    install_seclists
+    #install_recon_tools
+    #install_seclists
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
@@ -127,6 +121,6 @@ main() {
     echo "==========="
     echo "A toolkit to configure a Fedora Linux Security Research System."
 
-    full_install
+    install
 }
 main
