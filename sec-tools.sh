@@ -137,7 +137,7 @@ main() {
     echo "2) Install Web Proxies"
     echo "3) Install Extra Recon Tools"
     echo "4) Install SecLists"
-    echo "4) Install Everything"
+    echo "5) Install Everything"
 
     echo "> "
     
