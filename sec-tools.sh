@@ -49,9 +49,9 @@ update_system() {
 }
 
 ## Repo packages
+REPO_GROUPS=("security-lab" "development-libs" "c-development" "rpm-development-tools" "container-management" "php")
 CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "kernel-devel" "golang" "rust" "cargo" "ruby-devel")
 CLEANING_TOOLS=("bleachbit" "clamav" "clamav-freshclam")
-REPO_GROUPS=("security-lab" "development-libs" "c-development" "rpm-development-tools" "container-management" "php")
 RECON_TOOLS=("netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
 
 ## Flatpak tools
@@ -74,7 +74,9 @@ configure_dnf_repos() {
 base_packages() {
     echo -e "$greenplus Installing required packages $reset"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
-    sudo dnf install -y "${CORE_TOOLS[@]} ${CLEANING_TOOLS[@]} ${HACK_TOOLS[@]} ${CONTAINER[@]} ${SCAN_TOOLS[@]}"
+    sudo dnf install -y "${CORE_TOOLS[@]}" "${CLEANING_TOOLS[@]}" "${RECON_TOOLS[@]}"
+    # sudo dnf install -y "${CLEANING_TOOLS[@]}" 
+    # sudo dnf install -y "${RECON_TOOLS[@]}"
 }
 
 flatpak_packages() {
