@@ -80,6 +80,7 @@ base_install() {
 webproxy_install() {
     echo -e "$greenplus Installing Web Proxies $reset"
 
+    sudo dnf install -y flatpak
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     flatpak install flathub $ZAP
     flatpak install flathub $BURP
