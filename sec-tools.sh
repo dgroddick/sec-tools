@@ -96,7 +96,6 @@ recon_tools_install() {
 
     source ./extra.sh
     install_gowitness
-    install_amass
     install_waybackurls
     install_wpscan
     install_sublist3r
