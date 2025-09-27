@@ -103,7 +103,7 @@ install_recon_tools() {
 
 install_seclists() {
     echo -e "$greenplus Installing Seclists $reset"
-    if [ -d $HOME/SecLists ]; then
+    if [ -d "$HOME/SecLists" ]; then
         echo -e "\nSeclists already installed\n"
     else
         cd /opt && sudo git clone --depth 1 $SECLISTS
@@ -113,7 +113,9 @@ install_seclists() {
 install() {
     echo -e "$greenplus Installing everything... $reset"
 
-    mkdir $HOME/tools/
+    if [ ! -d "$HOME/tools" ]; then
+        mkdir $HOME/tools/
+    fi
     #configure_dnf_repos
     base_packages
     #install_recon_tools
