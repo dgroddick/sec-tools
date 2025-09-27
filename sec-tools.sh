@@ -49,11 +49,14 @@ update_system() {
 }
 
 ## Repo packages
-CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "kernel-devel" "golang" "rust" "cargo" "ruby-devel" "php-devel")
-CLEANING_TOOLS=("bleachbit" "clamav" "clamav-freshclam" "rkhunter" "chkrootkit")
+CORE_TOOLS=("dnf-plugins-core" "python3-devel" "python3-pip" "tcpdump" "git" "kernel-devel" "golang" "rust" "cargo" "ruby-devel")
+CLEANING_TOOLS=("bleachbit" "clamav" "clamav-freshclam")
 REPO_GROUPS=("security-lab" "development-libs" "c-development" "rpm-development-tools" "container-management" "php")
-HACK_TOOLS=("hydra" "john")
-RECON_TOOLS=("nmap" "netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
+RECON_TOOLS=("netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
+
+## Flatpak tools
+ZAP="org.zaproxy.ZAP"
+BURP="net.portswigger.BurpSuite-Community"
 
 # SecLists
 SECLISTS=https://github.com/danielmiessler/SecLists.git
@@ -71,8 +74,15 @@ configure_dnf_repos() {
 base_packages() {
     echo -e "$greenplus Installing required packages $reset"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
-
     sudo dnf install -y "${CORE_TOOLS[@]} ${CLEANING_TOOLS[@]} ${HACK_TOOLS[@]} ${CONTAINER[@]} ${SCAN_TOOLS[@]}"
+}
+
+flatpak_packages() {
+    echo -e "$greenplus Installing Flatpak packages $reset"
+
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install flathub $ZAP
+    flatpak install flathub $BURP
 }
 
 #
@@ -81,12 +91,8 @@ base_packages() {
 install_recon_tools() {
     echo -e "$greenplus Installing recon and scanning tools... $reset"
     source ./recon-tools.sh
-    install_gobuster
     install_gowitness
     install_amass
-    install_subfinder
-    install_assetfinder
-    install_httprobe
     install_waybackurls
     install_wpscan
     install_sublist3r
@@ -97,7 +103,7 @@ install_recon_tools() {
 
 install_seclists() {
     echo -e "$greenplus Installing Seclists $reset"
-    if [ -d /opt/SecLists ]; then
+    if [ -d $HOME/SecLists ]; then
         echo -e "\nSeclists already installed\n"
     else
         cd /opt && sudo git clone --depth 1 $SECLISTS
