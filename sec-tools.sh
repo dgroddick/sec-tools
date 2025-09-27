@@ -71,39 +71,38 @@ configure_dnf_repos() {
     sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
 }
 
-base_packages() {
+base_install() {
     echo -e "$greenplus Installing required packages $reset"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
     sudo dnf install -y "${CORE_TOOLS[@]}" "${CLEANING_TOOLS[@]}" "${RECON_TOOLS[@]}"
-    # sudo dnf install -y "${CLEANING_TOOLS[@]}" 
-    # sudo dnf install -y "${RECON_TOOLS[@]}"
 }
 
-flatpak_packages() {
-    echo -e "$greenplus Installing Flatpak packages $reset"
+webproxy_install() {
+    echo -e "$greenplus Installing Web Proxies $reset"
 
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     flatpak install flathub $ZAP
     flatpak install flathub $BURP
 }
 
-#
-# Tools for recon and scanning
-#
-install_recon_tools() {
-    echo -e "$greenplus Installing recon and scanning tools... $reset"
-    source ./recon-tools.sh
+recon_tools_install() {
+    echo -e "$greenplus Installing extra recon and scanning tools... $reset"
+    if [ ! -d "$HOME/tools" ]; then
+        mkdir $HOME/tools/
+    fi
+
+    source ./extra.sh
     install_gowitness
     install_amass
     install_waybackurls
     install_wpscan
     install_sublist3r
     install_theharvester
+    install_sqlmap
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
-
-install_seclists() {
+seclists_install() {
     echo -e "$greenplus Installing Seclists $reset"
     if [ -d "$HOME/SecLists" ]; then
         echo -e "\nSeclists already installed\n"
@@ -112,16 +111,16 @@ install_seclists() {
     fi
 }
 
-install() {
+everything_install() {
     echo -e "$greenplus Installing everything... $reset"
 
     if [ ! -d "$HOME/tools" ]; then
         mkdir $HOME/tools/
     fi
-    #configure_dnf_repos
-    base_packages
-    #install_recon_tools
-    #install_seclists
+    base_install
+    webproxy_install
+    recon_tools_install
+    seclists_install
 
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
@@ -131,6 +130,30 @@ main() {
     echo "==========="
     echo "A toolkit to configure a Fedora Linux Security Research System."
 
-    install
+    echo "What do you want to do?"
+    echo "1) Install Core Security Tools"
+    echo "2) Install Web Proxies"
+    echo "3) Install Extra Recon Tools"
+    echo "4) Install SecLists"
+
+    echo "> "
+    
+    read OPT
+    case "${OPT}" in
+        1)
+            base_install
+            ;;
+        2)  
+            webproxy_install
+            ;;
+        3)
+            recon_tools_install
+            ;;
+        4)
+            seclists_install
+            ;;
+        *)
+            echo "Please select a number from 1-4.\n"
+    esac
 }
 main

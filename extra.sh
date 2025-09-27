@@ -61,7 +61,7 @@ install_sublist3r() {
     if [ -d $HOME/tools/Sublist3r ]; then
         echo -e "\nSublist3r already installed\n"
     else
-        cd $HOME/tools/Sublist3r && git clone --depth 1 $SUBLIST3R
+        cd $HOME/tools/ && git clone --depth 1 $SUBLIST3R
     fi
 }
 
@@ -70,7 +70,7 @@ install_theharvester() {
     if [ -d $HOME/tools/theHarvester ]; then
         echo -e "\ntheHarvester already installed\n"
     else
-        cd $HOME/tools/theHarvester && git clone --depth 1 $THEHARVESTER
+        cd $HOME/tools/ && git clone --depth 1 $THEHARVESTER
     fi
 }
 
