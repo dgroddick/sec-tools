@@ -106,10 +106,10 @@ recon_tools_install() {
 
 seclists_install() {
     echo -e "$greenplus Installing Seclists $reset"
-    if [ -d "$HOME/SecLists" ]; then
+    if [ -d "$HOME/tools/SecLists" ]; then
         echo -e "\nSeclists already installed\n"
     else
-        cd /opt && sudo git clone --depth 1 $SECLISTS
+        cd $HOME/tools && git clone --depth 1 $SECLISTS
     fi
 }
 
@@ -153,6 +153,9 @@ main() {
             ;;
         4)
             seclists_install
+            ;;
+        5)
+            everything_install
             ;;
         *)
             echo "Please select a number from 1-4.\n"
