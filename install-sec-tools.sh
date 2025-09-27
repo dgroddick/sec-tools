@@ -58,20 +58,17 @@ RECON_TOOLS=("netcat" "ffuf" "gobuster" "assetfinder" "subfinder" "httprobe")
 ZAP="org.zaproxy.ZAP"
 BURP="net.portswigger.BurpSuite-Community"
 
-# SecLists
+## SecLists
 SECLISTS=https://github.com/danielmiessler/SecLists.git
 
-# RPMFusion
-RPMFUSION="https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-RPMFUSION_NONFREE="https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-
-
-configure_dnf_repos() {
-    echo -e "$greenplus Setting up RPMFusion $reset"
-    sudo dnf install -y $RPMFUSION $RPMFUSION_NONFREE
-}
+## Extra scanning tools
+GOWITNESS=github.com/sensepost/gowitness@latest
+WAYBACKURLS=github.com/tomnomnom/waybackurls@latest
+SUBLIST3R=https://github.com/aboul3la/Sublist3r
 
 base_install() {
+    update_system
+    
     echo -e "$greenplus Installing required packages $reset"
     sudo dnf group install -y "${REPO_GROUPS[@]}"
     sudo dnf install -y "${CORE_TOOLS[@]}" "${CLEANING_TOOLS[@]}" "${RECON_TOOLS[@]}"
@@ -94,13 +91,44 @@ recon_tools_install() {
 
     echo "export PATH=$PATH:$HOME/go/bin" >> $HOME/.profile && source $HOME/.profile
 
-    source ./extra.sh
-    install_gowitness
-    install_waybackurls
-    install_wpscan
-    install_sublist3r
-    install_theharvester
-    install_sqlmap
+    echo -e "$greenplus Installing Gowitness $reset"
+    if [ $(which gowitness) ]; then
+        echo -e "\ngowitness is already installed\n"
+    else
+        go install $GOWITNESS
+    fi
+
+
+    echo -e "$greenplus Installing Waybackurls $reset"
+    if [ $(which waybackurls) ]; then
+        echo -e "\nWaybackurls is already installed\n"
+    else
+        go install $WAYBACKURLS
+    fi
+
+    echo -e "$greenplus Installing WPScan $reset"
+    if [ $(which ruby) ]; then
+        if [ $(which wpscan) ]; then
+            echo -e "\nWPScan is already installed\n"
+        else
+            gem update && gem install wpscan
+        fi
+    fi
+    
+    echo -e "$greenplus Installing Sublist3r $reset"
+    if [ -d $HOME/tools/Sublist3r ]; then
+        echo -e "\nSublist3r already installed\n"
+    else
+        cd $HOME/tools/ && git clone --depth 1 $SUBLIST3R
+    fi
+
+    echo -e "$greenplus Installing SQLMap $reset"
+    if [ $(which sqlmap) ]; then
+        echo -e "\nSQLMap already installed\n"
+    else
+        python3 -m pip install sqlmap --user
+    fi
+
     echo -e "$greenplus All done! Happy Hacking!! $reset"
 }
 
@@ -159,6 +187,7 @@ main() {
             everything_install
             ;;
         *)
+            show_usage
             echo "Please select a number from 1-4.\n"
     esac
 }
