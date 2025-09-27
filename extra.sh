@@ -4,8 +4,6 @@ GOBUSTER=github.com/OJ/gobuster/v3@latest
 GOWITNESS=github.com/sensepost/gowitness@latest
 SUBFINDER=github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 ASSETFINDER=github.com/tomnomnom/assetfinder
-AMASS=github.com/owasp-amass/amass/v4/...@master
-HTTPROBE=github.com/tomnomnom/httprobe@latest 
 WAYBACKURLS=github.com/tomnomnom/waybackurls@latest
 SUBLIST3R=https://github.com/aboul3la/Sublist3r
 THEHARVESTER=https://github.com/laramies/theHarvester.git
@@ -27,14 +25,6 @@ install_gowitness() {
     fi
 }
 
-install_amass() {
-    echo -e "$greenplus Installing Amass $reset"
-    if [ $(which amass) ]; then
-        echo -e "\nAmass is already installed\n"
-    else
-        go install -v $AMASS
-    fi
-}
 
 install_waybackurls() {
     echo -e "$greenplus Installing Waybackurls $reset"

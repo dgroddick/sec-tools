@@ -92,6 +92,8 @@ recon_tools_install() {
         mkdir $HOME/tools/
     fi
 
+    echo "export PATH=$PATH:$HOME/go/bin" >> $HOME/.profile && source $HOME/.profile
+
     source ./extra.sh
     install_gowitness
     install_amass
